@@ -1,8 +1,8 @@
 # Laravel Vue.js auth with Cookies
 
-A simple cookie-based solution for API authentication with Laravel 6 Passport and Vue.js that allows you to refresh and keep logged in.
+A simple cookie-based solution for API authentication with Laravel 6 Passport and Vue.js that allows you to refresh and keep logged in. User auth data goes to localStorage.
 
-User auth data goes to localStorage.
+**WIP Check the Issues tab.**
 
 ## Installation
 
