@@ -1,0 +1,72 @@
+### LOGIN
+
+POST {{url}}auth/login
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+
+{
+	"email": "{{email}}",
+	"password": "{{password}}",
+	"rememberMe": true
+}
+
+> {%
+client.global.set('accessToken', response.body.data.accessToken);
+client.test('login', function(){
+    client.assert(response.status === 200, 'Logged in')
+});
+%}
+
+### REFRESH
+
+GET {{url}}auth/refresh
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+> {%
+client.global.set('accessToken', response.body.data.accessToken);
+client.test('refresh', function(){
+    client.assert(response.status === 200, 'Token refreshed')
+});
+%}
+
+### ME
+#
+#GET {{url}}auth/me
+#Accept: application/json
+#Cache-Control: no-cache
+#Content-Type: application/json
+#Authorization: Bearer {{accessToken}}
+#
+#{}
+#
+#> {%
+#client.test('me', function(){
+#    client.assert(response.status === 201, 'Unable to fetch user')
+#});
+#%}
+
+### LOGOUT
+
+GET {{url}}auth/logout
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+X-Requested-With: XMLHttpRequest
+Authorization: Bearer {{accessToken}}
+
+{}
+
+> {%
+client.global.set('accessToken', '');
+client.test('Logged out', function(){
+    client.assert(client.global.get('accessToken') === '', 'Token still set');
+    client.assert(response.status === 200, 'Unable to log out')
+});
+%}
+
+###
