@@ -11,7 +11,6 @@ export default new Vuex.Store({
     },
     mutations: {
         SESSION_SET(state, response) {
-            console.info("SESSION_SET");
             state.user = response.data.user;
             Cookies.set("accessToken", response.data.accessToken, {
                 expires: 7
@@ -29,13 +28,15 @@ export default new Vuex.Store({
     },
     actions: {
         register({ commit }, credentials) {
-            return axios.post("auth/register", credentials).then(({ data }) => {
-                commit("SESSION_SET", data);
-            });
+            return axios
+                .post("auth/register", credentials)
+                .then(({ response }) => {
+                    commit("SESSION_SET", response.data);
+                });
         },
         login({ commit }, credentials) {
-            return axios.post("auth/login", credentials).then(data => {
-                commit("SESSION_SET", data);
+            return axios.post("auth/login", credentials).then(response => {
+                commit("SESSION_SET", response.data);
             });
         },
         refresh({ commit }) {

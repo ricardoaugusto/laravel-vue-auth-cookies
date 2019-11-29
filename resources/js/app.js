@@ -2,6 +2,7 @@ import Vue from "vue";
 import router from "./router/router";
 import axios from "axios";
 import * as Cookies from "js-cookie";
+import "./validation/rules";
 
 require("./bootstrap");
 import store from "./vuex/store";
