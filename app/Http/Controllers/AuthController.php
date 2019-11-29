@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterFormRequest;
 use App\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -59,7 +57,6 @@ class AuthController extends Controller
 
     public function logout()
     {
-//        auth('api')->logout();
         request()->user()->token()->revoke();
 
         return response([
@@ -97,7 +94,7 @@ class AuthController extends Controller
         } else {
             return response()->json([
                 'data'  => null,
-                'error' => ['msg' => 'Could not login.']
+                'error' => ['msg' => 'Wrong credentials. Could not log in.']
             ], 401);
         }
     }

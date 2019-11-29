@@ -2,8 +2,8 @@ import Vue from "vue";
 import router from "./router/router";
 import axios from "axios";
 import * as Cookies from "js-cookie";
-// import RedirectIfNotAuthenticated from "./vuex/redirectIfNothAuthenticated";
 
+require("./bootstrap");
 import store from "./vuex/store";
 import App from "./App.vue";
 

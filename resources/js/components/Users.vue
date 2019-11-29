@@ -21,6 +21,10 @@ export default {
         };
     },
     computed: {},
+    beforeCreate() {},
+    created() {
+        this.getUsers();
+    },
     methods: {
         getUsers() {
             axios
@@ -32,12 +36,6 @@ export default {
                     console.error(err);
                 });
         }
-    },
-    beforeCreate() {
-        // Vue.redirectIfNotAuthenticated();
-    },
-    created() {
-        this.getUsers();
     }
 };
 </script>

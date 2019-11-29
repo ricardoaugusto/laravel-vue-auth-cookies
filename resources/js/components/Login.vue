@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div class="alert alert-danger" v-if="error">
-            <p>There was an error, unable to sign in with those credentials.</p>
-        </div>
         <form autocomplete="off" @submit.prevent="login" method="post">
             <div class="form-group">
                 <label for="email">E-mail</label>
@@ -25,6 +22,9 @@
                     required
                 />
             </div>
+            <div class="alert alert-danger" v-if="errorMessage">
+                {{ errorMessage }}
+            </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
     </div>
@@ -35,7 +35,7 @@ export default {
         return {
             email: null,
             password: null,
-            error: false
+            errorMessage: ""
         };
     },
     methods: {
@@ -51,7 +51,7 @@ export default {
                     this.$router.push({ name: "dashboard" });
                 })
                 .catch(err => {
-                    this.error = err;
+                    this.errorMessage = err.response.data.error.msg;
                 });
         }
     }

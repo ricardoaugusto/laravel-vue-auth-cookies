@@ -45,17 +45,12 @@ const options = {
             path: "/dashboard",
             name: "dashboard",
             component: Dashboard,
-            meta: {
-                requiresAuth: true
-            }
+            beforeEnter: isLoggedIn
         },
         {
             path: "/users",
             name: "users",
             component: Users,
-            meta: {
-                requiresAuth: true
-            },
             beforeEnter: isLoggedIn
         }
     ]

@@ -11,8 +11,11 @@ export default new Vuex.Store({
     },
     mutations: {
         SESSION_SET(state, response) {
+            console.info("SESSION_SET");
             state.user = response.data.user;
-            Cookies.set("accessToken", response.data.accessToken);
+            Cookies.set("accessToken", response.data.accessToken, {
+                expires: 7
+            });
             axios.defaults.headers.common[
                 "Authorization"
             ] = `Bearer ${response.data.accessToken}`;
@@ -26,27 +29,17 @@ export default new Vuex.Store({
     },
     actions: {
         register({ commit }, credentials) {
-            axios
-                .post("auth/register", credentials)
-                .then(({ data }) => {
-                    commit("SESSION_SET", data);
-                })
-                .catch(err => {
-                    console.error(err);
-                });
+            return axios.post("auth/register", credentials).then(({ data }) => {
+                commit("SESSION_SET", data);
+            });
         },
         login({ commit }, credentials) {
-            axios
-                .post("auth/login", credentials)
-                .then(({ data }) => {
-                    commit("SESSION_SET", data);
-                })
-                .catch(err => {
-                    console.error(err);
-                });
+            return axios.post("auth/login", credentials).then(data => {
+                commit("SESSION_SET", data);
+            });
         },
         refresh({ commit }) {
-            axios
+            return axios
                 .get("auth/refresh", {
                     headers: {
                         Authorization: `Bearer ${Cookies.get("accessToken")}`
@@ -54,9 +47,6 @@ export default new Vuex.Store({
                 })
                 .then(({ data }) => {
                     commit("SESSION_SET", data);
-                })
-                .catch(err => {
-                    console.error(err);
                 });
         },
         logout({ commit }) {
