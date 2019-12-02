@@ -2036,6 +2036,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2043,6 +2063,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      remember: false,
       errorMessage: "",
       fields: [{
         id: "email",
@@ -2067,7 +2088,8 @@ __webpack_require__.r(__webpack_exports__);
 
       var credentials = {
         email: this.fields[0].value,
-        password: this.fields[1].value
+        password: this.fields[1].value,
+        remember: this.remember
       };
       this.$store.dispatch("login", credentials).then(function () {
         _this.$router.push({
@@ -22979,10 +23001,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "container" }, [
     _c(
       "form",
       {
+        staticClass: "row",
         attrs: { autocomplete: "off", method: "post" },
         on: {
           submit: function($event) {
@@ -22992,80 +23015,144 @@ var render = function() {
         }
       },
       [
-        _vm._l(_vm.fields, function(field) {
-          return _c("ValidationProvider", {
-            key: field.id,
-            attrs: { name: field.name, rules: field.rules, persist: "" },
-            scopedSlots: _vm._u(
-              [
-                {
-                  key: "default",
-                  fn: function(ref) {
-                    var errors = ref.errors
-                    return [
-                      _c("div", { staticClass: "form-group" }, [
-                        _c("label", { attrs: { for: field.id } }, [
-                          _vm._v(_vm._s(field.label))
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model.lazy",
-                              value: field.value,
-                              expression: "field.value",
-                              modifiers: { lazy: true }
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            id: field.id,
-                            name: field.name,
-                            type: field.type,
-                            placeholder: field.label
-                          },
-                          domProps: { value: field.value },
-                          on: {
-                            change: function($event) {
-                              return _vm.$set(
-                                field,
-                                "value",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("span", [_vm._v(_vm._s(errors[0]))])
-                      ])
-                    ]
-                  }
-                }
-              ],
-              null,
-              true
-            )
-          })
-        }),
-        _vm._v(" "),
-        _vm.errorMessage
-          ? _c("div", { staticClass: "alert alert-danger" }, [
-              _vm._v("\n            " + _vm._s(_vm.errorMessage) + "\n        ")
-            ])
-          : _vm._e(),
-        _vm._v(" "),
         _c(
-          "button",
-          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-          [_vm._v("Login")]
+          "div",
+          { staticClass: "col-md-4 offset-md-4" },
+          [
+            _vm._l(_vm.fields, function(field) {
+              return _c("ValidationProvider", {
+                key: field.id,
+                attrs: { name: field.name, rules: field.rules, persist: "" },
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "default",
+                      fn: function(ref) {
+                        var errors = ref.errors
+                        return [
+                          _c("div", { staticClass: "form-group" }, [
+                            _c("label", { attrs: { for: field.id } }, [
+                              _vm._v(_vm._s(field.label))
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model.lazy",
+                                  value: field.value,
+                                  expression: "field.value",
+                                  modifiers: { lazy: true }
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                id: field.id,
+                                name: field.name,
+                                type: field.type,
+                                placeholder: field.label
+                              },
+                              domProps: { value: field.value },
+                              on: {
+                                change: function($event) {
+                                  return _vm.$set(
+                                    field,
+                                    "value",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(errors[0]))
+                            ])
+                          ])
+                        ]
+                      }
+                    }
+                  ],
+                  null,
+                  true
+                )
+              })
+            }),
+            _vm._v(" "),
+            _c("p", [
+              _c("label", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.remember,
+                      expression: "remember"
+                    }
+                  ],
+                  attrs: { type: "checkbox", name: "remember", value: "1" },
+                  domProps: {
+                    checked: Array.isArray(_vm.remember)
+                      ? _vm._i(_vm.remember, "1") > -1
+                      : _vm.remember
+                  },
+                  on: {
+                    change: function($event) {
+                      var $$a = _vm.remember,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = "1",
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 && (_vm.remember = $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            (_vm.remember = $$a
+                              .slice(0, $$i)
+                              .concat($$a.slice($$i + 1)))
+                        }
+                      } else {
+                        _vm.remember = $$c
+                      }
+                    }
+                  }
+                }),
+                _vm._v("\n                    Remember me\n                ")
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.errorMessage
+              ? _c("div", { staticClass: "alert alert-danger" }, [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(_vm.errorMessage) +
+                      "\n            "
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._m(0)
+          ],
+          2
         )
-      ],
-      2
+      ]
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "text-center" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("Login")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -40041,7 +40128,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
     SESSION_SET: function SESSION_SET(state, response) {
       state.user = response.data.user;
       js_cookie__WEBPACK_IMPORTED_MODULE_3__["set"]("accessToken", response.data.accessToken, {
-        expires: 7
+        expires: response.data.expiresAt
       });
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.defaults.headers.common["Authorization"] = "Bearer ".concat(response.data.accessToken);
     },

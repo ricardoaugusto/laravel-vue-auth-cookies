@@ -38,10 +38,12 @@ class AuthController extends Controller
      */
     public function refresh()
     {
+        $rememberFor = (request()->get('rememberMe')) ? 7 : 1;
+
         $user              = auth('api')->user();
         $createdToken      = $user->createToken('Access Token');
         $token             = $createdToken->token;
-        $token->expires_at = (request()->get('rememberMe')) ? Carbon::now()->addDays(1) : -1;
+        $token->expires_at = Carbon::now()->addDays($rememberFor);
         $token->save();
 
         return response()->json([
@@ -87,7 +89,6 @@ class AuthController extends Controller
         if ($authorized) {
             $createdToken      = request()->user()->createToken('Access Token');
             $token             = $createdToken->token;
-            $token->expires_at = ($request->get('rememberMe')) ? Carbon::now()->addWeeks(1) : -1;
             $token->save();
 
             return $this->respondWithToken($createdToken);
@@ -105,11 +106,13 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $now = Carbon::now();
+
         return response()->json([
             'data'  => [
                 'accessToken' => $token->accessToken,
                 'tokenType'   => 'Bearer',
-                'expiresAt'   => Carbon::parse($token->token->expires_at)->toDateTimeString(),
+                'expiresAt'   => Carbon::now()->diffInDays($token->token->expires_at),
                 'user'        => auth()->user(),
             ],
             'error' => null

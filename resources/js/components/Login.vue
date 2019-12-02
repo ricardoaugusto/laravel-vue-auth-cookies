@@ -1,31 +1,51 @@
 <template>
-    <div>
-        <form autocomplete="off" @submit.prevent="login" method="post">
-            <ValidationProvider
-                v-for="field in fields"
-                :key="field.id"
-                :name="field.name"
-                :rules="field.rules"
-                v-slot="{ errors }"
-                persist
-            >
-                <div class="form-group">
-                    <label :for="field.id">{{ field.label }}</label>
-                    <input
-                        v-model.lazy="field.value"
-                        :id="field.id"
-                        :name="field.name"
-                        :type="field.type"
-                        :placeholder="field.label"
-                        class="form-control"
-                    />
-                    <span>{{ errors[0] }}</span>
+    <div class="container">
+        <form
+            autocomplete="off"
+            @submit.prevent="login"
+            method="post"
+            class="row"
+        >
+            <div class="col-md-4 offset-md-4">
+                <ValidationProvider
+                    v-for="field in fields"
+                    :key="field.id"
+                    :name="field.name"
+                    :rules="field.rules"
+                    v-slot="{ errors }"
+                    persist
+                >
+                    <div class="form-group">
+                        <label :for="field.id">{{ field.label }}</label>
+                        <input
+                            v-model.lazy="field.value"
+                            :id="field.id"
+                            :name="field.name"
+                            :type="field.type"
+                            :placeholder="field.label"
+                            class="form-control"
+                        />
+                        <span class="text-danger">{{ errors[0] }}</span>
+                    </div>
+                </ValidationProvider>
+                <p>
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="remember"
+                            v-model="remember"
+                            value="1"
+                        />
+                        Remember me
+                    </label>
+                </p>
+                <div class="alert alert-danger" v-if="errorMessage">
+                    {{ errorMessage }}
                 </div>
-            </ValidationProvider>
-            <div class="alert alert-danger" v-if="errorMessage">
-                {{ errorMessage }}
+                <p class="text-center">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </p>
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
         </form>
     </div>
 </template>
@@ -38,6 +58,7 @@ export default {
     },
     data() {
         return {
+            remember: false,
             errorMessage: "",
             fields: [
                 {
@@ -63,7 +84,8 @@ export default {
         login() {
             let credentials = {
                 email: this.fields[0].value,
-                password: this.fields[1].value
+                password: this.fields[1].value,
+                remember: this.remember
             };
 
             this.$store

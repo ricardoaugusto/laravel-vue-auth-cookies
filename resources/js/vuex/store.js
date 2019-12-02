@@ -13,7 +13,7 @@ export default new Vuex.Store({
         SESSION_SET(state, response) {
             state.user = response.data.user;
             Cookies.set("accessToken", response.data.accessToken, {
-                expires: 7
+                expires: response.data.expiresAt
             });
             axios.defaults.headers.common[
                 "Authorization"
