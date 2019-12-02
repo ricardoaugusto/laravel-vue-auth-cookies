@@ -7,6 +7,7 @@
             class="row"
         >
             <div class="col-md-4 offset-md-4">
+                <h1>Login</h1>
                 <ValidationProvider
                     v-for="field in fields"
                     :key="field.id"
@@ -24,6 +25,7 @@
                             :type="field.type"
                             :placeholder="field.label"
                             class="form-control"
+                            v-on:focusin="clearErrorMessage()"
                         />
                         <span class="text-danger">{{ errors[0] }}</span>
                     </div>
@@ -40,10 +42,17 @@
                     </label>
                 </p>
                 <div class="alert alert-danger" v-if="errorMessage">
-                    {{ errorMessage }}
+                    {{ errorMessage }}<br />
+                    <a href="#">Did you forget your password?</a>
                 </div>
                 <p class="text-center">
                     <button type="submit" class="btn btn-primary">Login</button>
+                </p>
+                <p class="text-center">
+                    Don't have an account?
+                    <router-link :to="{ name: 'register' }"
+                        >Register</router-link
+                    >
                 </p>
             </div>
         </form>
@@ -60,6 +69,7 @@ export default {
         return {
             remember: false,
             errorMessage: "",
+            errors: {},
             fields: [
                 {
                     id: "email",
@@ -94,8 +104,11 @@ export default {
                     this.$router.push({ name: "dashboard" });
                 })
                 .catch(err => {
-                    this.errorMessage = err.response.data.error.msg;
+                    this.errorMessage = err.response.data.message;
                 });
+        },
+        clearErrorMessage() {
+            this.errorMessage = null;
         }
     }
 };

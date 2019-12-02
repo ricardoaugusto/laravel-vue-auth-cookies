@@ -13,7 +13,7 @@ export default new Vuex.Store({
         SESSION_SET(state, response) {
             state.user = response.data.user;
             Cookies.set("accessToken", response.data.accessToken, {
-                expires: response.data.expiresAt
+                expires: response.data.user.expires_at
             });
             axios.defaults.headers.common[
                 "Authorization"
@@ -28,11 +28,9 @@ export default new Vuex.Store({
     },
     actions: {
         register({ commit }, credentials) {
-            return axios
-                .post("auth/register", credentials)
-                .then(({ response }) => {
-                    commit("SESSION_SET", response.data);
-                });
+            return axios.post("auth/register", credentials).then(response => {
+                commit("SESSION_SET", response.data);
+            });
         },
         login({ commit }, credentials) {
             return axios.post("auth/login", credentials).then(response => {
@@ -40,15 +38,9 @@ export default new Vuex.Store({
             });
         },
         refresh({ commit }) {
-            return axios
-                .get("auth/refresh", {
-                    headers: {
-                        Authorization: `Bearer ${Cookies.get("accessToken")}`
-                    }
-                })
-                .then(({ data }) => {
-                    commit("SESSION_SET", data);
-                });
+            return axios.get("auth/refresh").then(response => {
+                commit("SESSION_SET", response.data);
+            });
         },
         logout({ commit }) {
             axios.get(process.env.APP_API + "auth/logout");

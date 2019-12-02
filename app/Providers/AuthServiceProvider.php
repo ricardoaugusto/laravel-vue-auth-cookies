@@ -26,9 +26,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Passport::routes();
+//        Passport::routes();
 
-        $rememberDays = (request()->get('remember')) ? 7 : 1;
-        Passport::personalAccessTokensExpireIn(now()->addDays($rememberDays));
+        if (auth('api')->user()) {
+            $expires_at = auth('api')->user()->expires_at;
+        } else {
+            $expires_at = (request()->get('expires_at')) ? 7 : 1;
+        }
+
+        Passport::personalAccessTokensExpireIn(now()->addDays($expires_at));
     }
 }

@@ -8,6 +8,12 @@
             >Login</router-link
         >
         <router-link
+            :to="{ name: 'register' }"
+            :class="`btn btn-primary btn-lg btn-block`"
+            v-if="!loggedIn"
+            >Register</router-link
+        >
+        <router-link
             :to="{ name: 'dashboard' }"
             :class="`btn btn-secondary btn-lg btn-block`"
             v-else

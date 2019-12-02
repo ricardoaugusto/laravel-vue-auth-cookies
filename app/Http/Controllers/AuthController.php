@@ -38,23 +38,18 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        $rememberFor = (request()->get('rememberMe')) ? 7 : 1;
-
-        $user              = auth('api')->user();
-        $createdToken      = $user->createToken('Access Token');
-        $token             = $createdToken->token;
-        $token->expires_at = Carbon::now()->addDays($rememberFor);
+        $user         = auth('api')->user();
+        $createdToken = $user->createToken('Access Token');
+        $token        = $createdToken->token;
         $token->save();
 
         return response()->json([
-            'data'  => [
+            'message' => '',
+            'data'    => [
                 'accessToken' => $createdToken->accessToken,
                 'tokenType'   => 'Bearer',
-                'expiresAt'   => Carbon::parse($createdToken->token->expires_at)->toDateTimeString(),
-                'user'        => $user,
-            ],
-            'error' => null
-        ], 200);
+                'user'        => $user
+            ]], 200);
     }
 
     public function logout()
@@ -62,8 +57,8 @@ class AuthController extends Controller
         request()->user()->token()->revoke();
 
         return response([
-            'data'  => ['msg' => 'Logged out'],
-            'error' => null
+            'message' => 'Logged out',
+            'data'    => [],
         ], 200);
     }
 
@@ -87,15 +82,19 @@ class AuthController extends Controller
         $authorized  = auth()->attempt($credentials);
 
         if ($authorized) {
-            $createdToken      = request()->user()->createToken('Access Token');
-            $token             = $createdToken->token;
+            $createdToken = request()->user()->createToken('Access Token');
+            $token        = $createdToken->token;
             $token->save();
+
+            $user = request()->user();
+            $user->expires_at = (request()->get('remember')) ? 7 : 1;
+            $user->save();
 
             return $this->respondWithToken($createdToken);
         } else {
             return response()->json([
-                'data'  => null,
-                'error' => ['msg' => 'Wrong credentials. Could not log in.']
+                'message' => 'Wrong credentials. Could not log in.',
+                'data'    => null
             ], 401);
         }
     }
@@ -106,16 +105,13 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
-        $now = Carbon::now();
-
         return response()->json([
-            'data'  => [
+            'message' => '',
+            'data'    => [
                 'accessToken' => $token->accessToken,
                 'tokenType'   => 'Bearer',
-                'expiresAt'   => Carbon::now()->diffInDays($token->token->expires_at),
                 'user'        => auth()->user(),
-            ],
-            'error' => null
+            ]
         ], 200);
     }
 }
